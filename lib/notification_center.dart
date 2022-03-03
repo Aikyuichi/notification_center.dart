@@ -26,7 +26,7 @@ class NotificationCenter {
     }
   }
 
-  void notify(String notificationId, {NotificationData? data}) {
+  void notify(String notificationId, {dynamic data}) {
     if (_observers.containsKey(notificationId)) {
       final observer = _observers[notificationId]!;
       if (data != null) {
@@ -42,8 +42,8 @@ class NotificationCenter {
   }
 }
 
-class NotificationData {
-  final dynamic value;
-
-  NotificationData(this.value);
-}
+// class NotificationData {
+//   final dynamic value;
+//
+//   NotificationData(this.value);
+// }
