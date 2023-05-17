@@ -14,12 +14,6 @@ class _Widget2State extends State<Widget2> {
   int _counter = 0;
 
   @override
-  void dispose() {
-    NotificationCenter().unsubscribe('incrementW2Counter');
-    super.dispose();
-  }
-
-  @override
   void initState() {
     super.initState();
     NotificationCenter().subscribe('incrementW2Counter', () {
@@ -27,6 +21,12 @@ class _Widget2State extends State<Widget2> {
         _counter++;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    NotificationCenter().unsubscribe('incrementW2Counter');
+    super.dispose();
   }
 
   @override

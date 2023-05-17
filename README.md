@@ -1,3 +1,7 @@
+# Notification Center
+
+[![Pub Version](https://img.shields.io/pub/v/notification_center)](https://pub.dev/packages/notification_center)
+
 A notification dispatch mechanism that enables the broadcast of information to registered observers.
 
 ## Getting Started
@@ -9,7 +13,7 @@ Add the dependency to your pubspec.yaml:
 ```yaml
 dependencies:
   ...
-  notification_center: ^0.0.2
+  notification_center: ^0.0.3
 ```
 
 ## Usage example

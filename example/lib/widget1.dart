@@ -21,7 +21,7 @@ class _Widget1State extends State<Widget1> {
 
   @override
   void dispose() {
-    NotificationCenter().unsubscribe('incrementW1Counter');
+    NotificationCenter().unsubscribe('incrementW1Counter', callback: _incrementCounter);
     super.dispose();
   }
 

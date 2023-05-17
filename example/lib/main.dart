@@ -36,8 +36,8 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text('Notification Center - Example'),
       ),
-      body: Column(
-        children: const [
+      body: const Column(
+        children: [
           Expanded(child: Widget1()),
           Expanded(child: Widget2()),
         ],
