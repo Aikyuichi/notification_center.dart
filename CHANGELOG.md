@@ -1,7 +1,8 @@
 ## 1.0.0
-* It's possible to pause / resume subscriptions
+* It's possible to pause / resume subscriptions.
 #### Breaking changes
-* The subscribed callback must conform to type void Function(T)
+* Subscribed callback must conform to type void Function(T).
+* Unsubscribe method no longer accepts the optional parameter "callback". Use subscription.cancel() instead.
 ## 0.0.3
 * documentation.
 ## 0.0.2
