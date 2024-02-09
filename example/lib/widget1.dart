@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:notification_center/notification_center.dart';
 
@@ -5,7 +7,7 @@ class Widget1 extends StatefulWidget {
   const Widget1({Key? key}) : super(key: key);
 
   @override
-  _Widget1State createState() => _Widget1State();
+  State<Widget1> createState() => _Widget1State();
 
 }
 
@@ -21,13 +23,15 @@ class _Widget1State extends State<Widget1> {
 
   @override
   void dispose() {
-    NotificationCenter().unsubscribe('incrementW1Counter', callback: _incrementCounter);
+    NotificationCenter().unsubscribe('incrementW1Counter');
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.black,
+      width: double.maxFinite,
       child: Column(
         children: [
           const Padding(
@@ -42,22 +46,19 @@ class _Widget1State extends State<Widget1> {
             padding: const EdgeInsets.only(top: 20),
             child: ElevatedButton(
               onPressed: () {
-                NotificationCenter().notify('incrementW2Counter');
+                NotificationCenter().notify<int>('incrementW2Counter', data: 5);
               },
               child: const Text('Increment Widget2 counter'),
             ),
           ),
         ],
       ),
-      color: Colors.black,
-      width: double.maxFinite,
     );
   }
 
-  void _incrementCounter() {
+  void _incrementCounter(data) {
     setState(() {
       _counter++;
     });
   }
-
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:notification_center/notification_center.dart';
 
@@ -9,22 +11,24 @@ class Widget2 extends StatefulWidget {
 
 }
 
-class _Widget2State extends State<Widget2> {
+class _Widget2State extends State<Widget2> with WidgetsBindingObserver {
 
   int _counter = 0;
 
   @override
   void initState() {
     super.initState();
-    NotificationCenter().subscribe('incrementW2Counter', () {
+    WidgetsBinding.instance.addObserver(this);
+    NotificationCenter().subscribe('incrementW2Counter', (int data) {
       setState(() {
-        _counter++;
+        _counter += data;
       });
     });
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     NotificationCenter().unsubscribe('incrementW2Counter');
     super.dispose();
   }
@@ -53,5 +57,4 @@ class _Widget2State extends State<Widget2> {
       ],
     );
   }
-
 }

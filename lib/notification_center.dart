@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Aikyuichi <aikyu.sama@gmail.com>
+// Copyright (c) 2024 Aikyuichi <aikyu.sama@gmail.com>
 // All rights reserved.
 // Use of this source code is governed by a MIT license that can be found in the LICENSE file.
 
@@ -6,9 +6,14 @@
 /// A notification dispatch mechanism that enables the broadcast of information to registered observers.
 library notification_center;
 
-/// A singleton. It takes care of registering observers, and posting notifications.
+import 'dart:async';
+import 'src/notification_subscriber.dart';
+
+export 'src/notification_subscriber.dart' show NotificationSubscription;
+
+/// A singleton. It takes care of subscribe observers, and post notifications.
 class NotificationCenter {
-  final _observers = <String, List<Function>>{};
+  final _notifications = <String, List<NotificationSubscriber>>{};
 
   static final NotificationCenter _instance = NotificationCenter.internal();
 
@@ -16,37 +21,67 @@ class NotificationCenter {
 
   NotificationCenter.internal();
 
-  /// Registers the observer in the center.
-  void subscribe(String notificationId, Function callback) {
-    if (!_observers.containsKey(notificationId)) {
-      _observers[notificationId] = [];
+  /// Adds to the center a subscriber for [notificationId].
+  ///
+  /// The returned [NotificationSubscription] can be used to pause/resume or cancel the subscription.
+  NotificationSubscription subscribe<T>(String notificationId, void Function(T) callback) {
+    if (!_notifications.containsKey(notificationId)) {
+      _notifications[notificationId] = [];
     }
-    _observers[notificationId]?.add(callback);
+    final subscriber = NotificationSubscriber<T>(callback);
+    subscriber.onCancel = () {
+      _notifications[notificationId]?.remove(subscriber);
+    };
+    _notifications[notificationId]?.add(subscriber);
+    return subscriber;
   }
 
-  /// Unregisters the observers in the center.
-  void unsubscribe(String notificationId, {Function? callback}) {
-    if (callback != null) {
-      if (_observers.containsKey(notificationId)) {
-        _observers[notificationId]!.remove(callback);
+  /// Remove from the center the subscribers of [notificationId].
+  Future<void> unsubscribe(String notificationId) async {
+    if (_notifications.containsKey(notificationId)) {
+      final subscribers = _notifications[notificationId]!;
+      for (var subscriber in subscribers) {
+        await subscriber.cancel();
       }
-    } else {
-      _observers.remove(notificationId);
+      _notifications.remove(notificationId);
     }
   }
 
-  /// Posts a notification, calling all associated observers.
-  void notify(String notificationId, {dynamic data}) {
-    if (_observers.containsKey(notificationId)) {
-      final observer = _observers[notificationId]!;
-      if (data != null) {
-        for (var callback in observer) {
-          callback(data);
-        }
-      } else {
-        for (var callback in observer) {
-          callback();
-        }
+  /// Pause all the subscribers of [notificationId]
+  void pause(String notificationId) {
+    if (_notifications.containsKey(notificationId)) {
+      final subscribers = _notifications[notificationId]!;
+      for (var subscriber in subscribers) {
+        subscriber.pause();
+      }
+    }
+  }
+
+  /// Resumes all the subscribers of [notificationId] after a pause.
+  void resume(String notificationId) {
+    if (_notifications.containsKey(notificationId)) {
+      final subscribers = _notifications[notificationId]!;
+      for (var subscriber in subscribers) {
+        subscriber.resume();
+      }
+    }
+  }
+
+  /// Whether all the subscribers of [notificationId] are currently paused.
+  bool isPaused(String notificationId) {
+    if (_notifications.containsKey(notificationId)) {
+      final subscribers = _notifications[notificationId]!;
+      return subscribers.map((e) => e.isPaused).reduce((value, element) => value && element);
+    }
+    return false;
+  }
+
+  /// Posts a given notification.
+  void notify<T>(String notificationId, {T? data}) {
+    if (_notifications.containsKey(notificationId)) {
+      final subscribers = _notifications[notificationId]!;
+      for (var subscriber in subscribers) {
+        subscriber.add(data);
       }
     }
   }

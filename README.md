@@ -13,18 +13,18 @@ Add the dependency to your pubspec.yaml:
 ```yaml
 dependencies:
   ...
-  notification_center: ^0.0.3
+  notification_center: ^1.0.0
 ```
 
 ## Usage example
 
 Check the example folder
 
-Subscribe observer
+Add a subscribers
 ```dart
-NotificationCenter().subscribe('updateCounter', () {
+NotificationCenter().subscribe('updateCounter', (data) {
   setState(() {
-    _counter++;
+    _counter += data;
   });
 });
 ```
@@ -34,13 +34,13 @@ NotificationCenter().subscribe('updateCounter', _updateCounter);
 
 ...
 
-void _updateCounter() {
+void _updateCounter(data) {
   setState(() {
     _counter++;
   });
 }
 ```
-Unsubscribe observer
+Remove subscribers
 ```dart
 NotificationCenter().unsubscribe('updateCounter');
 ```
@@ -52,12 +52,31 @@ NotificationCenter().notify('updateCounter');
 Passing data
 
 ```dart
-NotificationCenter().subscribe('updateCounter', (int value) {
+NotificationCenter().subscribe('updateCounter', (int data) {
   setState(() {
-    _counter = value;
+    _counter += data;
   });
 });
 ```
 ```dart
 NotificationCenter().notify('updateCounter', data: 10);
+```
+
+Pause/resume or cancel the subscription
+```dart
+final subscription = NotificationCenter().subscribe('updateCounter', (int data) {
+  setState(() {
+    _counter += data;
+  });
+});
+
+//Do some work...
+
+subscription.pause();
+print(subscription.isPaused); // true
+
+subscription.resume();
+print(subscription.isPaused); // false
+
+subscription.cancel();
 ```
