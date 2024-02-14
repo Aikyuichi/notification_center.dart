@@ -5,7 +5,6 @@
 import 'dart:async';
 
 abstract class NotificationSubscription {
-
   /// Whether the [NotificationSubscription] is currently paused.
   bool get isPaused;
 

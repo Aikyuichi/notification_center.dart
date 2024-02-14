@@ -1,3 +1,5 @@
+## 1.0.1
+* Fix issue when unsubscribing ([#2](https://github.com/Aikyuichi/notification_center.dart/issues/2))
 ## 1.0.0
 * It's possible to pause / resume subscriptions.
 #### Breaking changes

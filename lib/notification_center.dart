@@ -24,7 +24,8 @@ class NotificationCenter {
   /// Adds to the center a subscriber for [notificationId].
   ///
   /// The returned [NotificationSubscription] can be used to pause/resume or cancel the subscription.
-  NotificationSubscription subscribe<T>(String notificationId, void Function(T) callback) {
+  NotificationSubscription subscribe<T>(
+      String notificationId, void Function(T) callback) {
     if (!_notifications.containsKey(notificationId)) {
       _notifications[notificationId] = [];
     }
@@ -41,6 +42,7 @@ class NotificationCenter {
     if (_notifications.containsKey(notificationId)) {
       final subscribers = _notifications[notificationId]!;
       for (var subscriber in subscribers) {
+        subscriber.onCancel = null;
         await subscriber.cancel();
       }
       _notifications.remove(notificationId);
@@ -71,7 +73,9 @@ class NotificationCenter {
   bool isPaused(String notificationId) {
     if (_notifications.containsKey(notificationId)) {
       final subscribers = _notifications[notificationId]!;
-      return subscribers.map((e) => e.isPaused).reduce((value, element) => value && element);
+      return subscribers
+          .map((e) => e.isPaused)
+          .reduce((value, element) => value && element);
     }
     return false;
   }

@@ -1,9 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:example/widget1.dart';
 import 'package:example/widget2.dart';
-import 'package:notification_center/notification_center.dart';
 
 void main() {
   runApp(const MyApp());

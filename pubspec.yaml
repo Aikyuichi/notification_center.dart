@@ -1,6 +1,6 @@
 name: notification_center
 description: A simple notification center. A notification dispatch mechanism that enables the broadcast of information to registered observers.
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/Aikyuichi/notification_center.dart.git
 
 environment:
