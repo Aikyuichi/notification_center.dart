@@ -13,7 +13,7 @@ Add the dependency to your pubspec.yaml:
 ```yaml
 dependencies:
   ...
-  notification_center: ^1.0.0
+  notification_center: ^1.0.2
 ```
 
 ## Usage example

@@ -24,28 +24,28 @@ class NotificationCenter {
   /// Adds to the center a subscriber for [notificationId].
   ///
   /// The returned [NotificationSubscription] can be used to pause/resume or cancel the subscription.
-  NotificationSubscription subscribe<T>(
-      String notificationId, void Function(T) callback) {
-    if (!_notifications.containsKey(notificationId)) {
-      _notifications[notificationId] = [];
-    }
+  NotificationSubscription subscribe<T>(String notificationId, void Function(T) callback) {
     final subscriber = NotificationSubscriber<T>(callback);
     subscriber.onCancel = () {
       _notifications[notificationId]?.remove(subscriber);
     };
-    _notifications[notificationId]?.add(subscriber);
+    if (!_notifications.containsKey(notificationId)) {
+      _notifications[notificationId] = [];
+    }
+    _notifications[notificationId]!.add(subscriber);
     return subscriber;
   }
 
   /// Remove from the center the subscribers of [notificationId].
   Future<void> unsubscribe(String notificationId) async {
     if (_notifications.containsKey(notificationId)) {
-      final subscribers = _notifications[notificationId]!;
-      for (var subscriber in subscribers) {
-        subscriber.onCancel = null;
+      final subscribers = _notifications[notificationId]!.toList();
+      for (final subscriber in subscribers) {
         await subscriber.cancel();
       }
-      _notifications.remove(notificationId);
+      if (_notifications[notificationId]?.isEmpty ?? false) {
+        _notifications.remove(notificationId);
+      }
     }
   }
 
@@ -53,7 +53,7 @@ class NotificationCenter {
   void pause(String notificationId) {
     if (_notifications.containsKey(notificationId)) {
       final subscribers = _notifications[notificationId]!;
-      for (var subscriber in subscribers) {
+      for (final subscriber in subscribers) {
         subscriber.pause();
       }
     }
@@ -63,7 +63,7 @@ class NotificationCenter {
   void resume(String notificationId) {
     if (_notifications.containsKey(notificationId)) {
       final subscribers = _notifications[notificationId]!;
-      for (var subscriber in subscribers) {
+      for (final subscriber in subscribers) {
         subscriber.resume();
       }
     }

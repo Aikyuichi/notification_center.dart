@@ -5,8 +5,7 @@ class Widget2 extends StatefulWidget {
   const Widget2({Key? key}) : super(key: key);
 
   @override
-  _Widget2State createState() => _Widget2State();
-
+  State<Widget2> createState() => _Widget2State();
 }
 
 class _Widget2State extends State<Widget2> with WidgetsBindingObserver {

@@ -1,3 +1,5 @@
+## 1.0.2
+* Fix a concurrency issue when unsubscribing ([#3](https://github.com/Aikyuichi/notification_center.dart/issues/3))
 ## 1.0.1
 * Fix issue when unsubscribing ([#2](https://github.com/Aikyuichi/notification_center.dart/issues/2))
 ## 1.0.0

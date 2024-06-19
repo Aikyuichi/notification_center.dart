@@ -6,7 +6,6 @@ class Widget1 extends StatefulWidget {
 
   @override
   State<Widget1> createState() => _Widget1State();
-
 }
 
 class _Widget1State extends State<Widget1> {
