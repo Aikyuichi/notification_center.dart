@@ -19,18 +19,25 @@ abstract class NotificationSubscription {
 }
 
 class NotificationSubscriber<T> implements NotificationSubscription {
-  final StreamController<T> _controller = StreamController();
+  late final StreamController<T> _controller;
   late final StreamSubscription<T> _subscription;
-  FutureOr<void> Function()? onCancel;
+
+  void Function()? onCancel;
 
   @override
   bool get isPaused => _subscription.isPaused;
 
-  NotificationSubscriber(void Function(T) callback) {
+  NotificationSubscriber(
+    void Function(T) callback,
+    void Function()? onPause,
+    void Function()? onResume,
+  ) {
+    _controller = StreamController(
+      onPause: () => onPause?.call(),
+      onResume: () => onResume?.call(),
+      onCancel: () => onCancel?.call(),
+    );
     _subscription = _controller.stream.listen(callback);
-    _controller.onCancel = () {
-      this.onCancel?.call();
-    };
   }
 
   void add(dynamic data) {

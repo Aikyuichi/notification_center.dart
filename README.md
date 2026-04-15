@@ -13,7 +13,7 @@ Add the dependency to your pubspec.yaml:
 ```yaml
 dependencies:
   ...
-  notification_center: ^1.0.2
+  notification_center: ^1.1.0
 ```
 
 ## Usage example
@@ -22,7 +22,7 @@ Check the example folder
 
 Add a subscribers
 ```dart
-NotificationCenter().subscribe('updateCounter', (data) {
+NotificationCenter().subscribe('updateCounter', (int data) {
   setState(() {
     _counter += data;
   });
@@ -64,11 +64,13 @@ NotificationCenter().notify('updateCounter', data: 10);
 
 Pause/resume or cancel the subscription
 ```dart
-final subscription = NotificationCenter().subscribe('updateCounter', (int data) {
-  setState(() {
-    _counter += data;
-  });
-});
+final subscription = NotificationCenter().subscribe(
+  'updateCounter',
+  _updateCounter,
+  onPause: () => print('Paused'),
+  onResume: () => print('Resumed'),
+  onCancel: () => print('Cancelled'),
+);
 
 //Do some work...
 

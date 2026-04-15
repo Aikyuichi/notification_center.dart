@@ -22,11 +22,27 @@ class NotificationCenter {
   NotificationCenter.internal();
 
   /// Adds to the center a subscriber for [notificationId].
-  ///
   /// The returned [NotificationSubscription] can be used to pause/resume or cancel the subscription.
-  NotificationSubscription subscribe<T>(String notificationId, void Function(T) callback) {
-    final subscriber = NotificationSubscriber<T>(callback);
+  ///
+  /// The [callback] function is called when a [notificationId] is posted.
+  ///
+  /// The [onPause] function is called when the subscription becomes paused. [onResume] is called when the subscription is resumed.
+  ///
+  /// the [onCancel] function is called when the subscription is canceled.
+  NotificationSubscription subscribe<T>(
+    String notificationId,
+    void Function(T) callback, {
+    void Function()? onPause,
+    void Function()? onResume,
+    void Function()? onCancel,
+  }) {
+    final subscriber = NotificationSubscriber<T>(
+      callback,
+      onPause,
+      onResume,
+    );
     subscriber.onCancel = () {
+      onCancel?.call();
       _notifications[notificationId]?.remove(subscriber);
     };
     if (!_notifications.containsKey(notificationId)) {
@@ -81,6 +97,7 @@ class NotificationCenter {
   }
 
   /// Posts a given notification.
+  /// Use the [data] parameter to pass data to the subscribers.
   void notify<T>(String notificationId, {T? data}) {
     if (_notifications.containsKey(notificationId)) {
       final subscribers = _notifications[notificationId]!;
