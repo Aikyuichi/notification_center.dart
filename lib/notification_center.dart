@@ -31,7 +31,7 @@ class NotificationCenter {
   /// The [onCancel] function is called when the subscription is canceled.
   NotificationSubscription subscribe<T>(
     String notificationId,
-    void Function(T) callback,{
+    void Function(T) callback, {
     void Function()? onPause,
     void Function()? onResume,
     void Function()? onCancel,
