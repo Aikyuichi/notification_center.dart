@@ -1,9 +1,12 @@
+## 1.1.1
+* Added comprehensive unit test suite.
+* Documentation and example project improvements.
 ## 1.1.0
 * New callbacks in *subscribe* function.
   * onPause
   * onResume
   * onCancel
-* The sample project was updated.
+* The example project was updated.
 ## 1.0.2
 * Fix a concurrency issue when unsubscribing ([#3](https://github.com/Aikyuichi/notification_center.dart/issues/3)).
 ## 1.0.1
@@ -16,6 +19,6 @@
 ## 0.0.3
 * Documentation.
 ## 0.0.2
-* Include example.
+* Include example project.
 ## 0.0.1
 * Initial release.

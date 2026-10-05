@@ -11,7 +11,7 @@ import 'src/notification_subscriber.dart';
 
 export 'src/notification_subscriber.dart' show NotificationSubscription;
 
-/// A singleton. It takes care of subscribe observers, and post notifications.
+/// A singleton that manages subscriber registration and notification dispatching.
 class NotificationCenter {
   final _notifications = <String, List<NotificationSubscriber>>{};
 
@@ -21,17 +21,17 @@ class NotificationCenter {
 
   NotificationCenter.internal();
 
-  /// Adds to the center a subscriber for [notificationId].
+  /// Adds a subscriber for [notificationId] to the center.
   /// The returned [NotificationSubscription] can be used to pause/resume or cancel the subscription.
   ///
   /// The [callback] function is called when a [notificationId] is posted.
   ///
   /// The [onPause] function is called when the subscription becomes paused. [onResume] is called when the subscription is resumed.
   ///
-  /// the [onCancel] function is called when the subscription is canceled.
+  /// The [onCancel] function is called when the subscription is canceled.
   NotificationSubscription subscribe<T>(
     String notificationId,
-    void Function(T) callback, {
+    void Function(T) callback,{
     void Function()? onPause,
     void Function()? onResume,
     void Function()? onCancel,
@@ -52,7 +52,7 @@ class NotificationCenter {
     return subscriber;
   }
 
-  /// Remove from the center the subscribers of [notificationId].
+  /// Removes all subscribers of [notificationId] from the center.
   Future<void> unsubscribe(String notificationId) async {
     if (_notifications.containsKey(notificationId)) {
       final subscribers = _notifications[notificationId]!.toList();
@@ -65,7 +65,7 @@ class NotificationCenter {
     }
   }
 
-  /// Pause all the subscribers of [notificationId]
+  /// Pauses all subscribers of [notificationId].
   void pause(String notificationId) {
     if (_notifications.containsKey(notificationId)) {
       final subscribers = _notifications[notificationId]!;
@@ -75,7 +75,7 @@ class NotificationCenter {
     }
   }
 
-  /// Resumes all the subscribers of [notificationId] after a pause.
+  /// Resumes all subscribers of [notificationId] after a pause.
   void resume(String notificationId) {
     if (_notifications.containsKey(notificationId)) {
       final subscribers = _notifications[notificationId]!;
@@ -85,7 +85,7 @@ class NotificationCenter {
     }
   }
 
-  /// Whether all the subscribers of [notificationId] are currently paused.
+  /// Whether all subscribers of [notificationId] are currently paused.
   bool isPaused(String notificationId) {
     if (_notifications.containsKey(notificationId)) {
       final subscribers = _notifications[notificationId]!;
